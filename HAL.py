@@ -42,7 +42,7 @@ def makeguess(wordlist, guesses=[], feedback=[]):
     # print(wordlist) 
 
     # List of all the best starting words for wordle.
-    bestwords = ['adieu','roate','audio','stare','teary','cheat','story','tread','poopy'] # poopy is just for Eicholtz
+    # bestwords = ['adieu','roate','audio','stare','teary','cheat','story','tread','poopy'] # poopy is just for Eicholtz
     
     # Use random.choice(bestwords) here if we have not made a single guess yet.
     # This list of words is the best set of starting words to use.
@@ -53,30 +53,59 @@ def makeguess(wordlist, guesses=[], feedback=[]):
     # Do we want to have variables for the feedback? Like the number of green/yellow we have figured out
     # We would have to loop through each element of feedback and only count it once 
     # (like the same green letter in guesses 1 and 2 should only count as 1 green)
-    num_of_green = 0
-    num_of_yellow = 0
-    yellow_letters = []
-    character_counter = 0
+
+    yellow_letters = []     # Keeps track of the letters that have been yellow
+    character_counter = 0   # Counts the character we are on - Iterator
+    green_letters = ['','','','','']    # Keeps track of the location of the green letters
+    grey_letters = []       # Keeps track of all the letters not in the word
+    
+
+    list_counter = 0 # Counts the list we are on - Iterator
 
     # This is helpful for totals, but it doesnt take into account similar/repeated yellow letters OR repeated green letters
     # OR letters turning from yellow to green
     for list in feedback:
+        
         character_counter = -1
         for element in list:
             character_counter += 1
-            if element == 1:
-                if (guesses[-1][character_counter]) in yellow_letters:
-                    continue
+            
+            if element == 2:
+                green_letters[character_counter] = guesses[list_counter][character_counter] # adds green letters to the right spot in green_letters list
+
+            elif element == 1:
+                if (guesses[list_counter][character_counter]) in green_letters:
+                    continue # Skips over letter if the letter is in list already
+                elif (guesses[list_counter][character_counter]) in yellow_letters:
+                    continue # Skips over letter if the letter is in yellow list already
                 else:
-                    num_of_yellow +=1
-                    yellow_letters.append(guesses[-1][character_counter])
-            elif element == 2:
-                num_of_green += 1
+                    yellow_letters.append(guesses[list_counter][character_counter])  # Adds yellow letters to yellow_letters list
+            
+            elif element == 0:
+                if (guesses[list_counter][character_counter]) in grey_letters:
+                    continue # Skips over letter if the letter is in list already
+                elif (guesses[list_counter][character_counter]) in green_letters:
+                    continue # Skips over letter if the letter is in green list already
+                elif (guesses[list_counter][character_counter]) in yellow_letters:
+                    continue #  Skips over letter if the letter is in yellow list already
+                else:
+                    grey_letters.append(guesses[list_counter][character_counter]) # Adds grey letters to grey_letters list
+
+ 
+        # Iterates the counter       
+        list_counter += 1
+
+    # Checks that there are no elements in yellow_letters that are also in green_letters. Used for filtering later on
+    # for i in range (0, len(yellow_letters)-1):
+    #     if yellow_letters[i] in green_letters:
+    #         yellow_letters.remove(i) # Removes i element from yellow_letters if it is a green letter as well
+
+                
     
     # We would get rid of the print statements, these are just to see if the iteration was working
-    print(f"the number of green is {num_of_green}")
-    print(f"the number of yellow is {num_of_yellow}")
     print(f"the letters in the word are {yellow_letters}")
+    print(f"the grey letters in the word are {grey_letters}")
+    print(f"Green Letters: {green_letters}")
 
     # I'm having issues with the above code changing between runs...
     # Idk if we can even use the code, but it might be helpful
@@ -90,24 +119,25 @@ def makeguess(wordlist, guesses=[], feedback=[]):
     # Would we have to create a third set, fourth set? Like all anagrams, but slowly using less common letters?
 
 
-    # I commented out the logic below to test it with random words
-    return random.choice(wordlist)
 
     # FIRST WORD
-    # If it is the first guess, pick a word from bestwords
+    # If it is the first guess, pick a random word
     if len(guesses) == 0:
-        print (wordlist[1])
-        print (wordlist[wordlist.index(random.choice(bestwords))])
-        return wordlist[wordlist.index(random.choice(bestwords))] 
-        # random.choice( list(set(wordlist) - (set(wordlist)-set(bestwords))))
+        return random.choice(wordlist) 
+
+    elif len(guesses) >= 1:
+        # utilize feedback
+        return random.choice(wordlist)
+        
+        
 
 
     # BASED ON FEEDBACK
     # else if it is guesses 5-6 and there is some sort of feedback or there is enough feedback...
     # enough feedback : at least 2 green letters or 1 green and at least 2 yellow or at least 3 yellow
-    elif (len(guesses) >= 5 and feedback != 0) or (num_of_green) >= 2 or (num_of_green == 1 and num_of_yellow >= 2) or (num_of_yellow >= 3):
-        # return based on the feedback
-        return random.choice(wordlist)
+    # elif (len(guesses) >= 5 and feedback != 0) or (num_of_green) >= 2 or (num_of_green == 1 and num_of_yellow >= 2) or (num_of_yellow >= 3):
+    #     # return based on the feedback
+    #     return random.choice(wordlist)
 
 
     # "LETTER FARMING"/GOOD FOLLOWUP WORD
