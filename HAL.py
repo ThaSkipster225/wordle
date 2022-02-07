@@ -118,35 +118,61 @@ def makeguess(wordlist, guesses=[], feedback=[]):
     # Our second set would then be the next common words
     # Would we have to create a third set, fourth set? Like all anagrams, but slowly using less common letters?
 
-
+    # Finding the starting value for the filter
+    if (len(guesses) <= 1):
+        
+        start_index = 0
+    else:
+        
+        start_index = wordlist.index(guesses[-1])
+    
 
     # Filter through the wordlist
+    
+    green_empty = False
 
-    # Check for green matching
-    for i in range (0, len(wordlist)-1): # go through each word in the list, i represents the index of that word in the list
-        for x in range (0,4): # go through each character of green letters, x is the character
-            if green_letters[x] == '': # if there is no green letter there, skip to the next character
-                continue
-            else: # else, check the word in wordlist with the green letter
-                if wordlist[i][x] != green_letters[x]: # if the wordlist word at that index does not equal the green_letter at that index
-                    wordlist.remove(wordlist[i]) # remove the word from the wordlist
-                    break # break out of the for loop to go to the next word in the list
+    # Check if green_letters list is empty
+    for i in range (0, len(green_letters)): # go through each index of green_letters
+        if green_letters[i] != '': # if the index is not empty
+            green_empty = False # empty condtion is false
+            break # break out of the loop
+        else:
+            if i == 4: # else, if all indexes have been checked, the green_letters is empty
+                green_empty = True
+
+    # Loop for whole of wordlist
+    for i in range (start_index, len(wordlist)): # go through each word in the list, i represents the index of that word in the list
+        
+        # Create flags that are checked for each word in the list, they all start as falseish
+        green_flag = True
+        yellow_flag = False
+        grey_flag = False
+        
+        # if the green_letters list is empty, the word automtically passes the green letter check
+        if green_empty == True:
+            green_flag = True
+
+        else: # else if there are green letters, the word must be checked against them
+            for x in range (0,5): # go through each character of green letters, x is the character
+                if green_letters[x] == '': # if there is no green letter there, skip to the next character
+                    continue
+                else: # else, check the word in wordlist with the green letter
+                    if wordlist[i][x] != green_letters[x]: # if the wordlist word at that index does not equal the green_letter at that index
+                        # Move to yellow checker
+                        green_flag = False
+                        break
         
     
     print(f"the length of wordlist is {len(wordlist)}")
 
-    # Check for yellow letters
-    for i in range(0, len(wordlist)-1): # go through each word in the list, i represents the index of that word in the list
-        for x in range(0, len(yellow_letters)-1): # go through each letter in yellow letter, x is the character
-            if str(yellow_letters[x]) in wordlist[i]: # if the character in yellow letters is in the word, go to next character
-                continue
-            else: 
-                wordlist.remove(wordlist[i]) # else, remove the word from the list
-                break # break out of for loop to go to the next word in the list
-        
-    print(f"the length of wordlist is {len(wordlist)}")
-
-
+    # # Check for yellow letters
+    # for i in range(0, len(wordlist)-1): # go through each word in the list, i represents the index of that word in the list
+    #     for x in range(0, len(yellow_letters)-1): # go through each letter in yellow letter, x is the character
+    #         if str(yellow_letters[x]) in wordlist[i]: # if the character in yellow letters is in the word, go to next character
+    #             continue
+    #         else: 
+    #             wordlist.remove(wordlist[i]) # else, remove the word from the list
+    #             break # break out of for loop to go to the next word in the list
 
 
     # FIRST WORD
