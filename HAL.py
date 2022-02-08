@@ -96,11 +96,6 @@ def makeguess(wordlist, guesses=[], feedback=[]):
         # Iterates the counter       
         list_counter += 1
 
-    # Checks that there are no elements in yellow_letters that are also in green_letters. Used for filtering later on
-    # for i in range (0, len(yellow_letters)-1):
-    #     if yellow_letters[i] in green_letters:
-    #         yellow_letters.remove(i) # Removes i element from yellow_letters if it is a green letter as well
-
                 
     
     # We would get rid of the print statements, these are just to see if the iteration was working
@@ -186,20 +181,18 @@ def makeguess(wordlist, guesses=[], feedback=[]):
             if yellow_letters[y] not in wordlist[i]: # if the letter is not in the word
                 yellow_flag = False # the word does not pass the yellow letter check
                 break
-            else: # if the letter is in the word
-                for p in range(0, len(feedback)):
-                    for m in range(0,5):
+            else: # if the letter is in the word...
+                for p in range(0, len(feedback)): # cycle though all the feedback lists
+                    for m in range(0,5): # looking at each index
+                        # if the letter in the guess at that index is the yellow letter AND the feedback given was a 1
                         if (guesses[p][m] == yellow_letters[y]) and (feedback[p][m] == 1):
-                            if wordlist[i][m] == yellow_letters[y]:
-                                yellow_flag = False
+                            if wordlist[i][m] == yellow_letters[y]: # if the current word has that letter at that spot
+                                yellow_flag = False # it does not pass the yellow letter check
                                 break
-                    
                     if yellow_flag == False:
-                        break
-                
+                        break # if it was found false, break out of the loop
                 if yellow_flag == False:
-                    break
-
+                    break # if it was found false, break out of the loop
 
 
         # if the yellow letter check does not pass, continue to the next word in the list
@@ -223,47 +216,8 @@ def makeguess(wordlist, guesses=[], feedback=[]):
             continue
         
     
-    # print(f"the length of wordlist is {len(wordlist)}")
-
-    # # Check for yellow letters
-    # for i in range(0, len(wordlist)-1): # go through each word in the list, i represents the index of that word in the list
-    #     for x in range(0, len(yellow_letters)-1): # go through each letter in yellow letter, x is the character
-    #         if str(yellow_letters[x]) in wordlist[i]: # if the character in yellow letters is in the word, go to next character
-    #             continue
-    #         else: 
-    #             wordlist.remove(wordlist[i]) # else, remove the word from the list
-    #             break # break out of for loop to go to the next word in the list
-
-
-    # FIRST WORD
-    # If it is the first guess, pick a random word
-    # if len(guesses) == 0:
-    #     return random.choice(wordlist) 
-
-    # elif len(guesses) >= 1:
-    #     # utilize feedback
-    #     return random.choice(wordlist)
         
         
-
-
-    # BASED ON FEEDBACK
-    # else if it is guesses 5-6 and there is some sort of feedback or there is enough feedback...
-    # enough feedback : at least 2 green letters or 1 green and at least 2 yellow or at least 3 yellow
-    # elif (len(guesses) >= 5 and feedback != 0) or (num_of_green) >= 2 or (num_of_green == 1 and num_of_yellow >= 2) or (num_of_yellow >= 3):
-    #     # return based on the feedback
-    #     return random.choice(wordlist)
-
-
-    # "LETTER FARMING"/GOOD FOLLOWUP WORD
-    # else pick a "good" word
-    # good word : commonly used letters, no letter overlap with previous guesses
-    # else:
-    #     return random.choice(wordlist)
-
-    # Use feedback to determine the location of the letters within the word, if it's 2, it stays there.
-    # If it's a 1, then it is in the word, but needs to be moved elsewhere in the word. Make the AI guess where it would be.
-
 
 if __name__ == "__main__":
     wordlist = utils.readwords("allwords5.txt")
