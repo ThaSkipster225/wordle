@@ -108,11 +108,32 @@ def makeguess(wordlist, guesses=[], feedback=[]):
     print(f"the grey letters in the word are {grey_letters}")
     print(f"Green Letters: {green_letters}")
 
-    revised_grey_letters = []
-    # Cleaning of the grey gooses
-    for i in range (0,len(grey_letters)):
-        if grey_letters[i] not in green_letters:
-            revised_grey_letters.append(grey_letters[i])
+
+    # CLEANING THE YELLOW LETTER LIST
+    # There are instances where a letter is yellow and then the location is found, so it becomes green
+    # Those need to be removed from the yellow_letters list
+    revised_yellow_letters = [] # create a list to store the yellow letters that should be listed
+    for i in range (0,len(yellow_letters)): # go through each letter in the yellow_letters list
+        if yellow_letters[i] not in green_letters: # if the letter is not in green_letters
+            revised_yellow_letters.append(yellow_letters[i]) # append the letter to the revised list
+    
+    yellow_letters = revised_yellow_letters # set the yellow_letters list to the revised list
+
+    # CLEANING THE GREY LETTER LIST
+    # There are instances where a letter is duplicated in a guess and appears grey and then appears green/yellow
+    # Those grey letters need to be taken out of the grey list
+    revised_grey_letters = [] # create a list to store the grey letters that should be listed
+    for i in range (0,len(grey_letters)): # go through each letter in the grey_letters list
+        if grey_letters[i] not in green_letters: # if the letter is not in green_letters
+            revised_grey_letters.append(grey_letters[i]) # append the letter to the revised list
+    
+    grey_letters = revised_grey_letters # set the grey letter list to the revised list
+
+    for i in range (0,len(grey_letters)): # go through each letter in the grey_letters list
+        if grey_letters[i] not in yellow_letters: # if the letter is not in yellow_letters
+            revised_grey_letters.append(grey_letters[i]) # append the letter to the revised list
+
+    grey_letters = revised_grey_letters # set the grey letter list to the revised list
 
 
 
@@ -165,6 +186,21 @@ def makeguess(wordlist, guesses=[], feedback=[]):
             if yellow_letters[y] not in wordlist[i]: # if the letter is not in the word
                 yellow_flag = False # the word does not pass the yellow letter check
                 break
+            else: # if the letter is in the word
+                for p in range(0, len(feedback)):
+                    for m in range(0,5):
+                        if (guesses[p][m] == yellow_letters[y]) and (feedback[p][m] == 1):
+                            if wordlist[i][m] == yellow_letters[y]:
+                                yellow_flag = False
+                                break
+                    
+                    if yellow_flag == False:
+                        break
+                
+                if yellow_flag == False:
+                    break
+
+
 
         # if the yellow letter check does not pass, continue to the next word in the list
         if yellow_flag == False:

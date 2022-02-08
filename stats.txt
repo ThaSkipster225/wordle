@@ -1,5 +1,5 @@
-played=104
-win percentage=18
-current streak=0
-max streak=5
-guess distribution=0,1,2,4,8,4
+played=15530
+win percentage=68
+current streak=3
+max streak=30
+guess distribution=1,120,1044,2752,3589,3145
