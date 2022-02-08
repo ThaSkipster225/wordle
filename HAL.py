@@ -157,6 +157,7 @@ def makeguess(wordlist, guesses=[], feedback=[]):
         for y in range (0, len(yellow_letters)): # go through each yellow letter in the list
             if yellow_letters[y] not in wordlist[i]: # if the letter is not in the word
                 yellow_flag == False # the word does not pass the yellow letter check
+                break
 
         # if the yellow letter check does not pass, continue to the next word in the list
         if yellow_flag == False:
@@ -166,13 +167,14 @@ def makeguess(wordlist, guesses=[], feedback=[]):
         for z in range (0, len(grey_letters)): # go through each grey letter in the list
             if grey_letters[z] in wordlist[i]: # if the letter is in the word
                 grey_flag == False # the word does not pass the grey letter check
+                break
 
         # if the grey letter check does not pass, continue to the next word in the list
         if grey_flag == False:
             continue
 
         # if all checks have been passed, return the word
-        if green_flag == True and yellow_flag == True and grey_flag == True:
+        if (green_flag == True and yellow_flag == True and grey_flag == True):
             return wordlist[i]
     
     # print(f"the length of wordlist is {len(wordlist)}")
