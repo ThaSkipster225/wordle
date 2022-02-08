@@ -8,6 +8,7 @@
 # This file exists primarily to test the AI capabilities of the main program,
 # and perhaps to set the lowest possible benchmark for AI players? :)
 
+from cgitb import grey
 import pdb
 import random
 import utils
@@ -107,7 +108,13 @@ def makeguess(wordlist, guesses=[], feedback=[]):
     print(f"the grey letters in the word are {grey_letters}")
     print(f"Green Letters: {green_letters}")
 
-   
+    revised_grey_letters = []
+    # Cleaning of the grey gooses
+    for i in range (0,len(grey_letters)):
+        if grey_letters[i] not in green_letters:
+            revised_grey_letters.append(grey_letters[i])
+
+
 
     # USE FILTERS TO DETERMINE THE NEXT WORD GUESS
 
@@ -118,7 +125,7 @@ def makeguess(wordlist, guesses=[], feedback=[]):
     elif (len(guesses) == 1): # if it is the second guess, start the list from the beginning
         start_index = 0
     else: # otherwise, start the list from where we last guessed      
-        start_index = wordlist.index(guesses[-1])
+        start_index = wordlist.index(guesses[-1])+1
     
     
     # Check if green_letters list is empty
@@ -134,7 +141,7 @@ def makeguess(wordlist, guesses=[], feedback=[]):
         # Create flags that are checked for each word in the list, they all start as true
         green_flag = True
         yellow_flag = True
-        grey_flag = False
+        grey_flag = True
         
         # if the green_letters list is empty, the word automtically passes the green letter check
         if green_empty == True:
@@ -156,7 +163,7 @@ def makeguess(wordlist, guesses=[], feedback=[]):
         # Check that all yellow letters are in the word
         for y in range (0, len(yellow_letters)): # go through each yellow letter in the list
             if yellow_letters[y] not in wordlist[i]: # if the letter is not in the word
-                yellow_flag == False # the word does not pass the yellow letter check
+                yellow_flag = False # the word does not pass the yellow letter check
                 break
 
         # if the yellow letter check does not pass, continue to the next word in the list
@@ -166,7 +173,7 @@ def makeguess(wordlist, guesses=[], feedback=[]):
         # Check that all grey letters are not in the word
         for z in range (0, len(grey_letters)): # go through each grey letter in the list
             if grey_letters[z] in wordlist[i]: # if the letter is in the word
-                grey_flag == False # the word does not pass the grey letter check
+                grey_flag = False # the word does not pass the grey letter check
                 break
 
         # if the grey letter check does not pass, continue to the next word in the list
@@ -176,6 +183,9 @@ def makeguess(wordlist, guesses=[], feedback=[]):
         # if all checks have been passed, return the word
         if (green_flag == True and yellow_flag == True and grey_flag == True):
             return wordlist[i]
+        else:
+            continue
+        
     
     # print(f"the length of wordlist is {len(wordlist)}")
 
