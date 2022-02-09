@@ -99,8 +99,8 @@ def makeguess(wordlist, guesses=[], feedback=[]):
                 
     
     # We would get rid of the print statements, these are just to see if the iteration was working
-    print(f"the letters in the word are {yellow_letters}")
-    print(f"the grey letters in the word are {grey_letters}")
+    print(f"\nYellow Letters: {yellow_letters}")
+    print(f"Grey Letters: {grey_letters}")
     print(f"Green Letters: {green_letters}")
 
 
