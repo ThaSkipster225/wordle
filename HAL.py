@@ -132,7 +132,10 @@ def makeguess(wordlist, guesses=[], feedback=[]):
 
 
 
-    # USE FILTERS TO DETERMINE THE NEXT WORD GUESS
+    # USE FILTERS TO DETERMINE WORDS THAT FIT THE FEEDBACK
+
+    # Create a list to store possible guesses
+    guess_options = []
 
     # Finding the starting value for the filter
     
@@ -141,7 +144,7 @@ def makeguess(wordlist, guesses=[], feedback=[]):
     elif (len(guesses) == 1): # if it is the second guess, start the list from the beginning
         start_index = 0
     else: # otherwise, start the list from where we last guessed      
-        start_index = wordlist.index(guesses[-1])+1
+        start_index = wordlist.index(guesses[-1])
     
     
     # Check if green_letters list is empty
@@ -152,7 +155,7 @@ def makeguess(wordlist, guesses=[], feedback=[]):
             break # break out of the loop
 
     # Loop for whole of wordlist
-    for i in range (start_index, len(wordlist)): # go through each word in the list, i represents the index of that word in the list
+    for i in range (0, len(wordlist)): # go through each word in the list, i represents the index of that word in the list
         
         # Create flags that are checked for each word in the list, they all start as true
         green_flag = True
@@ -209,12 +212,35 @@ def makeguess(wordlist, guesses=[], feedback=[]):
         if grey_flag == False:
             continue
 
-        # if all checks have been passed, return the word
+        # if all checks have been passed, add the index to the list of possible guesses
         if (green_flag == True and yellow_flag == True and grey_flag == True):
-            return wordlist[i]
+            guess_options.append(i)
         else:
             continue
-        
+
+    
+
+    
+    # Return a word based on the list of possible guesses
+    if len(guess_options) == 0: # if there is only one possible guess, return that guess
+        return wordlist[guess_options[0]]
+    else:
+        for h in range (0, len(guess_options)): # loop through each guess option (word)
+            letter_double = False # assume that there are no letter doubles in the word (at first)
+            for l in range (0,5): # iterate through each letter to look at
+                for t in range (0,5): # iterate through each letter to compare
+                    if l == t: # if we are comparing the letter to itself (same position)
+                        continue # continue to the next letter to compare
+                    else: # otherwise compare the letters
+                        if wordlist[guess_options[h]][l] == wordlist[guess_options[h]][t]: # if the letter in the l spot matches the letter in the t spot
+                            letter_double =True # there is a letter double in the word
+                
+            if letter_double == False: # after analyzing the word, if it does not have any letter doubles
+                return wordlist[guess_options[h]] # return the word
+    
+    if letter_double == True: # if all of the options have letter doubles...
+        return wordlist[guess_options[0]] # return the first possible guess
+
     
         
         
